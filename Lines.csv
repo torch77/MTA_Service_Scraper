@@ -1,0 +1,51 @@
+Line_ID,Line_Name,Service_Type,Line_Type
+1,123,Subway,A_Div
+2,456,Subway,A_Div
+3,7,Subway,A_Div
+4,ACE,Subway,B_Div
+5,BDFM,Subway,B_Div
+6,G,Subway,B_Div
+7,JZ,Subway,B_Div
+8,L,Subway,B_Div
+9,NQR,Subway,B_Div
+10,S,Subway,B_Div
+11,SIR,Subway,SIR
+12,B1 - B84,Bus,Brooklyn
+13,B100 - B103,Bus,Brooklyn
+14,BM1 - BM5,Bus,Express
+15,BX1 - BX55,Bus,Bronx
+16,BXM1 - BXM18,Bus,Express
+17,M1 - M116,Bus,Manhattan
+18,Q1 - Q113,Bus,Queens
+19,QM1 - QM44,Bus,Express
+20,S40 - S98,Bus,Staten_Island
+21,x1 - x68,Bus,Express
+22,Bronx-Whitestone,B_T,Bridge
+23,Cross Bay,B_T,Bridge
+24,Henry Hudson,B_T,Bridge
+25,Hugh L. Carey,B_T,Tunnel
+26,Marine Parkway,B_T,Bridge
+27,Queens Midtown,B_T,Tunnel
+28,Robert F. Kennedy,B_T,Bridge
+29,Throgs Neck,B_T,Bridge
+30,Verrazano-Narrows,B_T,Tunnel
+31,Babylon,LIRR,Rail
+32,City Terminal Zone,LIRR,Rail
+33,Far Rockaway,LIRR,Rail
+34,Hempstead,LIRR,Rail
+35,Long Beach,LIRR,Rail
+36,Montauk,LIRR,Rail
+37,Oyster Bay,LIRR,Rail
+38,Port Jefferson,LIRR,Rail
+39,Port Washington,LIRR,Rail
+40,Ronkonkoma,LIRR,Rail
+41,West Hempstead,LIRR,Rail
+42,Hudson,MNR,Rail
+43,Harlem,MNR,Rail
+44,Wassaic,MNR,Rail
+45,New Haven,MNR,Rail
+46,New Canaan,MNR,Rail
+47,Danbury,MNR,Rail
+48,Waterbury,MNR,Rail
+49,Pascack Valley,MNR,Rail
+50,Port Jervis,MNR,Rail
