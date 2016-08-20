@@ -3,8 +3,6 @@ Do this eventually using OOP to practice
 Also set up to insert data into postgresql database on AWS
 Add error catching so that script will keep running on AWS if there is error with retrival from web"""
 
-
-
 # http://web.mta.info/status/serviceStatus.txt
 # Libraries
 from bs4 import BeautifulSoup
@@ -42,7 +40,6 @@ def mta_parse(xml_obj):
 
     # check response code, bail if not 0
     if response_code != "0":
-        print("adfas")
         return None
 
     ok_status = "GOOD SERVICE"
@@ -56,7 +53,7 @@ def mta_parse(xml_obj):
 
     # get date and time of request, doesn't change
     now = datetime.datetime.now()
-    date = now.strftime("%Y%m%m")
+    date = now.strftime("%Y%m%d")
     hour = now.hour
 
     # get subway statuses by line
@@ -75,7 +72,6 @@ def mta_parse(xml_obj):
         # store line info
         sub_info.append({"Service": "Subway", "Name": name, "Req_Date": date, "Req_Hour": hour, "Status": status,
                          "Status_Text": status_text, "Status_Date": status_date, "Status_Hour": status_hour})
-        break
 
     # get bus statuses
     for line in xml_obj.bus.find_all("line"):
@@ -93,7 +89,6 @@ def mta_parse(xml_obj):
         # store line info
         bus_info.append({"Service": "Bus", "Name": name, "Req_Date": date, "Req_Hour": hour, "Status": status,
                          "Status_Text": status_text, "Status_Date": status_date, "Status_Hour": status_hour})
-        break
 
 
     # get B+T statuses
@@ -112,7 +107,6 @@ def mta_parse(xml_obj):
         # store line info
         bt_info.append({"Service": "B_T", "Name": name, "Req_Date": date, "Req_Hour": hour, "Status": status,
                         "Status_Text": status_text, "Status_Date": status_date, "Status_Hour": status_hour})
-        break
 
     # get LIRR statuses
     for line in xml_obj.LIRR.find_all("line"):
@@ -130,7 +124,6 @@ def mta_parse(xml_obj):
         # store line info
         lirr_info.append({"Service": "LIRR", "Name": name, "Req_Date": date, "Req_Hour": hour, "Status": status,
                           "Status_Text": status_text, "Status_Date": status_date, "Status_Hour": status_hour})
-        break
 
     # get MNR statuses
     for line in xml_obj.MetroNorth.find_all("line"):
@@ -148,7 +141,6 @@ def mta_parse(xml_obj):
         # store line info
         mnr_info.append({"Service": "MNR", "Name": name, "Req_Date": date, "Req_Hour": hour, "Status": status,
                          "Status_Text": status_text, "Status_Date": status_date, "Status_Hour": status_hour})
-        break
 
     # return lists
     return [sub_info, bus_info, bt_info, lirr_info, mnr_info]
@@ -167,9 +159,10 @@ def update_db(service_info):
 
     # check that list exists
     if service_info is not None:
-        # iterate over services and then lines to update db
+        # iterate over service dictionaries and then lines to update db
         for service in service_info:
             for line in service:
+                # get information from dictionary
                 service = line.get("Service")
                 name = line.get("Name")
                 req_date = line.get("Req_Date")
@@ -177,11 +170,15 @@ def update_db(service_info):
                 status = line.get("Status")
                 text = line.get("Status_Text")
                 status_date = line.get("Status_Date")
-                # set this to None for now b/c we need to parse string
+                # check status hour, if none then return none
+                if line.get("Status_Hour") == None:
+                    status_hour = None
+                else:
+                    status_hour = datetime.datetime.strptime(line.get("Status_Hour").strip(), "%I:%M%p").hour + 1
+                # set this to None for now b/c we need to parse string, MTA has space instead of zero padding for hour
                 # datetime.datetime.strptime(" 1:02AM", " %I:%M%p")
                 # status_hour = int(line.get("Status_Hour")) + 1 # add hour b/c it is references hour table and can't start at 0
-                # , maybe just make it a text field with no look up
-                status_hour = None
+
 
                 # get status and name pk's
                 line_pk = get_line_pk(service, name)
@@ -191,12 +188,12 @@ def update_db(service_info):
                 values = {"Record": None, "Line_ID": line_pk, "Status_ID": status_pk, "Req_Date": req_date,
                           "Req_Hour": req_hour, "Text": text, "Status_Date": status_date, "Status_Hour": status_hour}
 
-                print("Inserting " + name)
+                # print("Inserting " + str(values))
                 try:
                     c.execute("INSERT INTO Status_Record (Record_ID, Line_ID, Status_ID, Req_Date, Req_Hour, "
                               "Status_Text, Status_Date, Status_Hour) VALUES (:Record, :Line_ID, :Status_ID, :Req_Date, "
                               ":Req_Hour, :Text, :Status_Date, :Status_Hour)", values)
-                    print("Insert complete")
+                    print("Insert " + line.get("Name") + " complete")
                 except sqlite3.Error as e:
                     print(e)
 
