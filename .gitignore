@@ -20,6 +20,13 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# other
+*.pem
+R_Analysis/
+*.csv
+*.sqlite
+Notes.txt
+
 # =========================
 # Operating System Files
 # =========================
